@@ -1,0 +1,39 @@
+<html lang="en">
+<head>
+    <title>File Watcher</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+    <script>
+        let socket = new SockJS("/ws")
+        let client = Stomp.over(socket)
+
+        client.connect({}, function(frame){
+            console.log("Connected !!")
+
+            client.subscribe("/topic/fileUpdates", function (data) {
+                print(data.body)
+            })
+        })
+
+        function print1(message) {
+            let log = document.getElementById("logs")
+            let newLogs = document.createElement("p")
+
+            newLogs.appendChild(document.createTextNode(message))
+            log.appendChild(newLogs)
+        }
+
+        function print(message) {
+            mydiv = document.getElementById("mydiv");
+            mydiv.innerHTML += message;
+        }
+
+    </script>
+</head>
+<body>
+<h1>File Update Service</h1>
+<p id="logs"></p>
+<div id="mydiv">ABCD</div>
+</body>
+</html>
